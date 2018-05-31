@@ -83,7 +83,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://www.lindanyan.club/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:locale" content="default">
 <meta name="twitter:card" content="summary">
@@ -117,7 +117,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://www.lindanyan.club/"/>
 
 
 
@@ -231,7 +231,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/31/cwh2015150169/">
+    <link itemprop="mainEntityOfPage" href="http://www.lindanyan.club/2018/05/31/cwh2015150169/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -262,7 +262,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-31T15:28:16+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-31T15:28:00+08:00">
                 2018-05-31
               </time>
             
@@ -302,7 +302,9 @@
       
         
           
-            
+            <p>Spring3.1新增了一种全新的缓存机制，这种缓存机制与Spring容器无缝地整合在一起。可以对容器中的任意Bean或Bean的方法增加缓存，Spring的缓存机制非常的灵活，它可以对容器中的任意Bean或Bean的任意方法进行缓存，因此这种缓存机制可以在JavaEE应用的任何层次上进行缓存。<br>Spring缓存同样不是一种具体的缓存实现方案，他底层同样需要依赖EhCache，Guava等具体的缓存工具。但这也正是Spring缓存机制的优势，应用程序只要面向Spring缓存API编程，应用底层的缓存实现可以在不同的缓存实现之间的自由切换，应用程序无需任何改变，只要对配置文件略作修改就可以。<br>启用Spring缓存<br>Spring配置文件专门为缓存提供了一个cache命名空间，为了启用Spring缓存，需要在配置文件中导入cache：命名空间。<br>导入cache：命名空间之后，启用Spring缓存还要两步。<br>在Spring配置文件中添加&lt;cache:annotation-driven cache-manager=”缓存管理器ID”/&gt;,该元素指定Spring根据注解来启用Bean级别或方剂级别的缓存。<br>针对不同的缓存实现配置对应的缓存管理器。<br>第一步非常简单，使用<a href="cache:annotation-driven.../" target="_blank" rel="noopener">cache:annotation-driven.../</a>元素可以通过cache-manager显示指定容器中缓存管理器的id<br>第二步略微有点麻烦，由于Spring底层可以使用大部分主流的Java缓存工具，而不同的缓存公户所需要的配置也不同。<br>1 Spring内置缓存实现的配置<br>Spring内置缓存实现只是一种内存中的缓存，并非真正的缓存实现，不建议在实际项目中使用Spring内置的缓存实现。<br>Spring内置的缓存实现使用SimpleCacheManager作为缓存管理器，使用SimpleCacheManager配置缓存比较简单，直接在Spring容器中配置该Bean，然后通过&lt;property…/&gt;驱动该缓存管理器执行setCaches（）方法来设置缓存区即可。<br>在实际应用中，开发者可以根据自己的需要的，配置更多的缓存区，一般来说应用有多少个组件需要缓存，程序就应该配置多少个缓存区。<br>2 EhCache缓存实现的配置<br>在配置EhCache缓存实现之前，首先需要贾昂EhCache缓存的JAR包添加到项目的类加载路径下。同时为了使用EhCache，同样需要在应用的类架子啊路径下添加一个ehcache.xml配置文件。<br>配置文件里面的缓存区的名字很重要，后面使用注解驱动时需要根据缓存区的名字来将缓存数据放入指定缓存区中。<br>Spring使用EhCacheCacheManager作为EhCache缓存实现的缓存管理器。因此只要将该对象配置在Spring容器中，它就可以作为缓存管理器使用，但EhCacheCacheManager底层需要依赖一个net.sf.ehcache.CacheManager作为缓存管理器。<br>为了将net.sf.ehcache.CacheManager纳入Spring容器的管理之下，Spring提供了EhCacheManagerFactoryBean工厂Bean，该工厂Bean实现了FactoryBean<cachemanager>接口。当程序吧EhCacheManagerFactoryBean部署在Spring容器中，并通过Spring 容器请求获取该工厂Bean是，实际返回的是她的产品——也就是CacheManager对象。<br>3 使用@Cacheable执行缓存<br>@Cacheable可以用于修饰方法或者修饰类，当使用@Cacheable修饰类时，用于告诉Spring在类级别上进行缓存——程序调用该类的实例的任何方法时都需要缓存，而且共享同一个缓存区；当使用@Cacheable修饰方法时，用于高速Spring在方法级别上进行缓存——只有当程序调用该方法时才需要缓存。<br>1 .类级别的缓存<br>使用2Cacheable修饰类时，就可以控制Spring在类级别上进行缓存，这样当程序调用该类的任意方法时，只要传入的参数相同，Spring就会使用缓存。<br>缓存的意义：当程序第一次调用该类的实例的某个方法时，Spring缓存机制会将该方法返回的数据放入指定缓存区——就是@Cacheable注解的value属性值所指定的缓存区(注意此处指定将数据放入users缓存区，这就要求前面为缓存管理器配置过名为users的缓存区)。以后程序调用该类的实例的任何方法时。只要传入的参数相同，Spring将不会真正执行该方法，而是直接利用缓存区中的数据。<br>类级别的缓存默认以所有方法参数作为key来缓存方法返回的数据——同一个类不管调用哪个方法，只要调用方法传入的参数相同，Spring都会直接利用缓存区的数据。<br>使用@Cacheable时可以指定如下属性<br>value：必需属性。该属性可以指定多个缓存区的名字，用于指定将方法返回值放入指定的缓存区内。<br>key：通过SpEL表达式显示指定缓存的key<br>condition：该属性指定一个返回boolean值的SpEL表达式，只有当该表达式返回true是，Spring才会缓存方法的返回值。<br>unless：该属性指定一个返回值boolean值的SpEL表达式，当该表达式的返回值是true时，Spring就不缓存方法的返回值。<br>注意：与@Cacheable注解功能类似的还有一个@CachePut注解，@CachePut注解同样会让Spring将方法返回值放入缓存区。与@Cacheable不同的是，@CachePut修饰的方法不会读取缓存区的数据——这意味着不管缓存区是否有数据，@CachePut总会告诉Spring要重新执行这些方法，并再次将返回值放入缓存区。<br>condition属性与unless属性的功能基本相似，但规则恰好相反；当condition指定的条件为true时，Spring缓存机制才会执行缓存；当unless指定的提哦案件为true时，则Spring缓存机制不执行缓存。<br>2 .方法级别的缓存<br>使用@Cacheable修饰方法时，就可以控制Spring在方法级别进行缓存，这样当程序调用该方法时，只要传入的参数相同，Spring就会使用缓存，<br>当不同方法使用的缓存区不同的时候，他们不能共享缓存数据。<br>使用@CacheEvict清除缓存数据<br>被@CacheEvict注解修饰的方法可以用于清除缓存，使用@CacheEvict注解时可以指定如下属性。<br>value：必须属性。用于指定该方法用于清除哪个缓存区的数据。<br>allEntries：该属性指定是否清空整个缓存区。<br>beforeInvocation：该属性指定是否在执行方法之前清除缓存。默认是在方法成功完成之后才清除缓存。<br>condition：该属性指定一个 SpEL表达式，只有当该表达式为true时才清除缓存。<br>key：通过SpEL表达式显示指定缓存的key</cachemanager></p>
+<p><img src="\\images\pasted-0.png\" alt="upload successful"></p>
+
           
         
       
@@ -350,7 +352,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/31/文章标题/">
+    <link itemprop="mainEntityOfPage" href="http://www.lindanyan.club/2018/05/31/文章标题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -469,7 +471,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/31/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://www.lindanyan.club/2018/05/31/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
